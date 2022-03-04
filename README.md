@@ -33,6 +33,7 @@ class LED:
             time.sleep(0.03)
 ```
 ```python
+# this is the led code
 import time
 import board
 from led import LED  # import the LED class from module, which is named led
@@ -47,10 +48,10 @@ while True:
 
 
 ### Evidence
-![alt](link to github page for gif)
+![gif of blue led fading](https://github.com/lgray52/ExpertCircuitPython/blob/main/evidence/classes_gif.gif)
 
 ### Wiring
-<img src="evidence/" alt="" height="300">
+<img src="evidence/classes_wiring.png" alt="wiring diagram for led" height="300">
 
 ### Reflection
 This assignment took a little bit of time to figure out, because understanding the code jargon takes a couple minutes. However, once you realise a class is just how you call the function you're trying to set up in the main code, and the module is just the whole code where your classes are, deciphering the rest is a little easier. As for the code itself, it's important to remember that when refering to the object that you want to be changing (in this case, the variable that would be led), has to be the variable established in the initialising section (--init--), self.led in this case. Also, it took me a couple minutes to realise the module had to be added to the Metro's library. Overall, this assignment was a little confusing, but generally manageable.
