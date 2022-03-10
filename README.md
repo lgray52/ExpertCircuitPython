@@ -299,7 +299,7 @@ class RGB:
 ![gif of rgb led](https://github.com/lgray52/ExpertCircuitPython/blob/main/evidence/rgbs.gif)
 
 ### Wiring
-<img src="evidence/" alt="" height="300">
+<img src="evidence/rgb_wiring.jpg" alt="Wiring diagram for two RGB LEDs" height="300">
 
 ### Reflection
 This assignment expanded the use of modules and classes, by making use of a module to set up a color changing led. This is useful, because you can control two LEDs at the same time with the same code. The primary lesson I learned was check your resistors, especially with the RGB LEDs, as both refused to work correctly over a partially unplugged resistor. This assignment was also a valuable lesson in light color theory, because green and red are yellow with the RGB LEDs. 
