@@ -4,6 +4,7 @@ Expert CircuitPython Coursework Engineering III
 ## Table of Contents
 * [Classes, Objects, and Modules](#ClassesObjectsModules)
 * [Fun with RGB LED's](#RGBleds)
+* [Photointerrupters](#Photointerrupter)
 
 ## ClassesObjectsModules
 
@@ -303,5 +304,54 @@ class RGB:
 
 ### Reflection
 This assignment expanded the use of modules and classes, by making use of a module to set up a color changing led. This is useful, because you can control two LEDs at the same time with the same code. The primary lesson I learned was check your resistors, especially with the RGB LEDs, as both refused to work correctly over a partially unplugged resistor. This assignment was also a valuable lesson in light color theory, because green and red are yellow with the RGB LEDs. 
+
+[Back to Table of Contents](#Table_of_Contents)
+
+
+## Photointerrupter
+
+### Description & Code
+Use photoresistor to print interrupts to the serial monitor. This assignment introduced a bunch of new functions, including the digitalio library, string function, and various variables. I used [this site](https://github.com/gventre04/CircuitPython) for guidance, and modified it to fit the assignment.
+
+```python
+# photointerrupter, L.G. 24.09.21
+
+import time
+import digitalio
+import board
+
+initial = time.monotonic()  #set initial time
+
+resistorPin = digitalio.DigitalInOut(board.D7) 
+resistorPin.direction = digitalio.Direction.INPUT
+resistorPin.pull = digitalio.Pull.UP
+# define resistor pin for photointerruptor - uses board as resistor
+
+counter = 0  # counts # of times photointerruptor interrupted
+
+val = False  # store value of resistorPin
+state = False  # store state (LOW/HIGH) of resistorPin
+
+while True:
+    val = resistorPin.value
+    if val and not state:
+        counter += 1  # add one to counter when state change detected
+    state = val
+
+    now = time.monotonic()  # sets current time
+    if now - initial >= 4:
+        print("I have been interrupted", str(counter), "times")
+        initial = now  # resets initial to current (counting to 4 again)
+    time.sleep(0.1)
+```
+
+### Evidence
+![gif of photoresistor counting](https://github.com/lgray52/CircuitPython/blob/main/evidence/photointerruptor.GIF)
+
+### Wiring
+<img src="evidence/photointerrupter_wiring.png" alt="photointerruptor wiring" height="300">
+
+### Reflection
+Using the digitalio library to use the pin connection as a resistor in order to detect a change in the state of the pin connecting it to the photointerrupter, this code is used to tell when a photointerrupter is interupted and count how many times this happens. By using the digitalio library, the pin is held at logic voltage, a high state, and switches to a low state when the photointerrupter is intrrupted. The counter is printed to the serial monitor every 4 seconds using time.monotonic(), a function which is used to calculate time based on a starting point, rather than the general time function which does not measure the time passed. By using two different time.monotonic() functions, one for the initial time and one for the current time, the time that had passed was able to be calculated and the count reset when it reached 4 in order to count back up to four again. 
 
 [Back to Table of Contents](#Table_of_Contents)
