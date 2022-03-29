@@ -367,13 +367,13 @@ This assignment was to use an LCD screen to display the value of a counter, and 
 # LCD, Lucy G 01.10.21
 
 import board
-from lcd.lcd import LCD  # weird lcd library thing
+from lcd.lcd import LCD  # lcd library - need the I2C as well
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 import time
 import touchio
 
 i2c = board.I2C()
-lcd = LCD(I2CPCF8574Interface(i2c, 0x3f), num_rows=2, num_cols=16)
+lcd = LCD(I2CPCF8574Interface(i2c, 0x3f), num_rows=2, num_cols=16)  # lab LCD screens have 2 rows and 16 columns for letters/numbers
 
 touch_A5 = touchio.TouchIn(board.A5)
 touch_A0 = touchio.TouchIn(board.A0)
@@ -391,9 +391,9 @@ while True:
         else:
             lcd.print("Down: ")
         lcd.print(str(counter))  # print the counter
-        lcd.print("   ")  # give it some space
+        lcd.print("   ")
         while touch_A5.value:
-            time.sleep(.01)  # idk this is j's thing
+            time.sleep(.01)  # this is from Jay's code - unclear where this comes from, but my code doesn't seem to work without it
 
     if touch_A0.value:
         reverse=-reverse  # negative (down)
@@ -412,7 +412,7 @@ while True:
 
 ### Wiring
 <img src="evidence/lcd_wiring.png" alt="simplified LCD wiring" height="300">
-*note: the LCD should have more wiring, with the SDA and SCL pins connected to their equivalently named MetroExpress pins, but the backpack is not shown in Tinkercad. Additionally, there should be a pin in A0 and A5 for capacitive touch.
+*note: the LCD should have more wiring, with the SDA and SCL pins connected to their equivalently named MetroExpress pins, but the backpack is not shown in Tinkercad. Additionally, there should be a pin in A0 and A5 for capacitive touch.*
 
 ### Reflection
 For this assignment, I collaborated with [Jay](https://github.com/jconkli07) for some of the code, but essentially, the code adds value to the counter when a certain wire is touched, and when the reverse wire is touched, reverses the sign of the counter. I learned that lcd.clear() is fine but not great, and in order to solve the problem of it continuing to print, lcd.set_cursor_pos(0,0) is much better (this sets the cursor to the first row and column). For the capacitive touch section of this assignment, I used the touchio library, which is used to assign pins for capacitive touch and use the state with the .value command to signal that the wire was touched. When one wire is touched, the reverse value is positive, and when the other is tocuhed, it is made negative (reverse = -reverse), causing the counter to count down instead of up. 
