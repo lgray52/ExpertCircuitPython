@@ -5,6 +5,7 @@ Expert CircuitPython Coursework Engineering III
 * [Classes, Objects, and Modules](#ClassesObjectsModules)
 * [Fun with RGB LED's](#RGBleds)
 * [Photointerrupters](#Photointerrupter)
+* [LCD](#LCD)
 
 ## ClassesObjectsModules
 
@@ -353,5 +354,67 @@ while True:
 
 ### Reflection
 Using the digitalio library to use the pin connection as a resistor in order to detect a change in the state of the pin connecting it to the photointerrupter, this code is used to tell when a photointerrupter is interupted and count how many times this happens. By using the digitalio library, the pin is held at logic voltage, a high state, and switches to a low state when the photointerrupter is intrrupted. The counter is printed to the serial monitor every 4 seconds using time.monotonic(), a function which is used to calculate time based on a starting point, rather than the general time function which does not measure the time passed. By using two different time.monotonic() functions, one for the initial time and one for the current time, the time that had passed was able to be calculated and the count reset when it reached 4 in order to count back up to four again. 
+
+[Back to Table of Contents](#Table_of_Contents)
+
+
+## LCD
+
+### Description & Code
+This assignment was to use an LCD screen to display the value of a counter, and use capacitive touch - where touching a wire is detected to perform a function - both to increase the counter and to reverse the direction the counter is counting in (using different wires), then print this information to the screen as well. This introduced the use of lcds to communicate information visually. The lcd library had to be imported (which took a couple steps) in order to be able to functionally use the lcd, and the touchio library was used for the capacitive touch section.
+
+```python
+# LCD, Lucy G 01.10.21
+
+import board
+from lcd.lcd import LCD  # weird lcd library thing
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
+import time
+import touchio
+
+i2c = board.I2C()
+lcd = LCD(I2CPCF8574Interface(i2c, 0x3f), num_rows=2, num_cols=16)
+
+touch_A5 = touchio.TouchIn(board.A5)
+touch_A0 = touchio.TouchIn(board.A0)
+
+counter = 0  # set counter value to zero
+reverse=1 # reverse value
+
+lcd.print("on")
+while True:
+    if touch_A5.value:
+        counter+=reverse
+        lcd.set_cursor_pos(0,0)  # set the cursor to the first row, first column
+        if reverse==1:  # when reverse is pos (going up)
+            lcd.print("Up: ")
+        else:
+            lcd.print("Down: ")
+        lcd.print(str(counter))  # print the counter
+        lcd.print("   ")  # give it some space
+        while touch_A5.value:
+            time.sleep(.01)  # idk this is j's thing
+
+    if touch_A0.value:
+        reverse=-reverse  # negative (down)
+        while touch_A0.value:
+            time.sleep(.1)
+        lcd.clear()
+        if reverse==1:
+            lcd.print("Up: ")
+        else:
+            lcd.print("Down: ")
+        lcd.print(str(counter))
+```
+
+### Evidence
+![lcd counter screen, switching between counting up and down](https://github.com/lgray52/ExpertCircuitPython/blob/main/evidence/lcd.GIF)
+
+### Wiring
+<img src="evidence/lcd_wiring.png" alt="simplified LCD wiring" height="300">
+*note: the LCD should have more wiring, with the SDA and SCL pins connected to their equivalently named MetroExpress pins, but the backpack is not shown in Tinkercad. Additionally, there should be a pin in A0 and A5 for capacitive touch.
+
+### Reflection
+For this assignment, I collaborated with [Jay](https://github.com/jconkli07) for some of the code, but essentially, the code adds value to the counter when a certain wire is touched, and when the reverse wire is touched, reverses the sign of the counter. I learned that lcd.clear() is fine but not great, and in order to solve the problem of it continuing to print, lcd.set_cursor_pos(0,0) is much better (this sets the cursor to the first row and column). For the capacitive touch section of this assignment, I used the touchio library, which is used to assign pins for capacitive touch and use the state with the .value command to signal that the wire was touched. When one wire is touched, the reverse value is positive, and when the other is tocuhed, it is made negative (reverse = -reverse), causing the counter to count down instead of up. 
 
 [Back to Table of Contents](#Table_of_Contents)
