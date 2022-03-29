@@ -412,7 +412,7 @@ while True:
 
 ### Wiring
 <img src="evidence/lcd_wiring.png" alt="simplified LCD wiring" height="300">
-*note: the LCD should have more wiring, with the SDA and SCL pins connected to their equivalently named MetroExpress pins, but the backpack is not shown in Tinkercad. Additionally, there should be a pin in A0 and A5 for capacitive touch.*
+*note: the LCD should have more wiring, with the SDA and SCL pins connected to their equivalently named MetroExpress pins, but the backpack is not shown in Tinkercad.Additionally, there should be a pin in A0 and A5 for capacitive touch.*
 
 ### Reflection
 For this assignment, I collaborated with [Jay](https://github.com/jconkli07) for some of the code, but essentially, the code adds value to the counter when a certain wire is touched, and when the reverse wire is touched, reverses the sign of the counter. I learned that lcd.clear() is fine but not great, and in order to solve the problem of it continuing to print, lcd.set_cursor_pos(0,0) is much better (this sets the cursor to the first row and column). For the capacitive touch section of this assignment, I used the touchio library, which is used to assign pins for capacitive touch and use the state with the .value command to signal that the wire was touched. When one wire is touched, the reverse value is positive, and when the other is tocuhed, it is made negative (reverse = -reverse), causing the counter to count down instead of up. 
